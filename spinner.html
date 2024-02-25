@@ -12,6 +12,7 @@
             scroll-snap-type: y mandatory;
             scrollbar-width: none;
             scroll-behavior: smooth;
+            text-align: center;
         }
 
         .container:before {
@@ -31,6 +32,10 @@
             height: 2.5rem;
             scroll-snap-align: center;
         }
+
+        #selection {
+            text-align: center;
+        }
     </style>
 
 </head>
@@ -49,8 +54,10 @@
         <div class="item">8</div>
     </div>
     <button onclick="scrollNow(document.querySelector('.container'), 1)">+</button>
+    <div id="selection">1</div>
     <script>
         const dir = [1, -1]
+        const selection = document.querySelector("#selection");
 
         function scrollev(event) {
             event.preventDefault();
@@ -60,7 +67,14 @@
         }
 
         function scrollNow(parent, direction) {
+
+            const unit = ((parent.scrollHeight - parent.scrollHeight % 8) / 8)
+            const number = (((parent.scrollTop + unit * direction) - (parent.scrollTop % unit)) / unit) + 1
+
+            if (number > 8 || number === 0) return;
+
             parent.scrollTo(0, parent.scrollTop + parent.scrollHeight / 8 * direction);
+            selection.innerText = number
         }
 
     </script>
