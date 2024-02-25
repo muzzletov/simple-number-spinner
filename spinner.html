@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-size: 200%;
+        }
+
+        .container {
+            height: 2.5rem;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+
+        .container:before {
+            display: block;
+            position: sticky;
+            top: 1rem;
+            height: 1.5rem;
+            width: 100%;
+            content: "";
+            background: linear-gradient(to top,
+                    rgba(255, 255, 255, 1) 10%,
+                    rgba(255, 255, 255, 0) 80%);
+            pointer-events: none;
+        }
+
+        .item {
+            height: 2.5rem;
+            scroll-snap-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <button onclick="scrollNow(document.querySelector('.container'), -1)">-</button>
+    <div class="container" onwheel="scrollev(event)">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div>
+        <div class="item">8</div>
+    </div>
+    <button onclick="scrollNow(document.querySelector('.container'), 1)">+</button>
+    <script>
+        const dir = [1, -1]
+
+        function scrollev(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const direction = dir[(event.deltaY >> 31) & 1];
+            scrollNow(event.target.parentElement, direction)
+        }
+
+        function scrollNow(parent, direction) {
+            parent.scrollTo(0, parent.scrollTop + parent.scrollHeight / 8 * direction);
+        }
+
+    </script>
+</body>
+
+</html>
