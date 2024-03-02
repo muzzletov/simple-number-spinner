@@ -57,7 +57,6 @@
 
             const unit = ((parent.scrollHeight - parent.scrollHeight % 8) / 8)
             const number = (((parent.scrollTop) - (parent.scrollTop % unit)) / unit) + 1
-            if (number > 8 || number === 0) return;
             selection.innerText = number
         }
 
