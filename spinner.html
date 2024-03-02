@@ -2,34 +2,21 @@
 
 <head>
     <style>
-        body {
-            font-size: 200%;
-        }
-
         .container {
-            height: 2.5rem;
+            height: 20px;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scrollbar-width: none;
-            scroll-behavior: smooth;
             text-align: center;
-        }
-
-        .container:before {
-            display: block;
-            position: sticky;
-            top: 1rem;
-            height: 1.5rem;
-            width: 100%;
-            content: "";
-            background: linear-gradient(to top,
-                    rgba(255, 255, 255, 1) 10%,
-                    rgba(255, 255, 255, 0) 80%);
-            pointer-events: none;
+            margin: 0;
+            padding: 0;
         }
 
         .item {
-            height: 2.5rem;
+            height: 20px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
             scroll-snap-align: center;
         }
 
@@ -41,9 +28,8 @@
 </head>
 
 <body>
-
     <button onclick="scrollNow(document.querySelector('.container'), -1)">-</button>
-    <div class="container" onwheel="scrollev(event)">
+    <div class="container" onwheel="scrollev(event)" onscrollend="update(event)">
         <div class="item">1</div>
         <div class="item">2</div>
         <div class="item">3</div>
@@ -62,19 +48,21 @@
         function scrollev(event) {
             event.preventDefault();
             event.stopPropagation();
-            const direction = dir[(event.deltaY >> 31) & 1];
-            scrollNow(event.target.parentElement, direction)
+
+            scrollNow(event.target.parentElement, dir[(event.deltaY >> 31) & 1])
+        }
+        <!-- sadly onscrollend is bugged with chrome !-->
+        function update(event) {
+            parent = event.target;
+
+            const unit = ((parent.scrollHeight - parent.scrollHeight % 8) / 8)
+            const number = (((parent.scrollTop) - (parent.scrollTop % unit)) / unit) + 1
+            if (number > 8 || number === 0) return;
+            selection.innerText = number
         }
 
         function scrollNow(parent, direction) {
-
-            const unit = ((parent.scrollHeight - parent.scrollHeight % 8) / 8)
-            const number = (((parent.scrollTop + unit * direction) - (parent.scrollTop % unit)) / unit) + 1
-
-            if (number > 8 || number === 0) return;
-
-            parent.scrollTo(0, parent.scrollTop + parent.scrollHeight / 8 * direction);
-            selection.innerText = number
+            parent.scrollTo({ left: 0, top: parent.scrollTop + parent.scrollHeight / 8 * direction, behavior: 'smooth' });
         }
 
     </script>
