@@ -65,9 +65,9 @@
 
             scrollNow(event.target.parentElement, dir[(event.deltaY >> 31) & 1])
         }
-        <!-- sadly onscrollend is a new handler and is bugged with the most recent version of chrome 
+        /*** sadly onscrollend is a new handler and is bugged with the most recent version of chrome 
             (onscrollend fires too quickly apparently and thus doesnt report the correct scrolltop).
-        !-->
+        ***/
         function update(event) {
             parent = event.target;
 
